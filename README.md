@@ -4,7 +4,7 @@ Requires an API key from ifttt.com
 
 This [example](https://www.hackster.io/gatoninja236/log-data-to-google-sheet-particle-photon-7f7f22) provides more background, but for the Particle environment.
 
-This code is for running it in a micropython environment.
+This code is for posting in a micropython environment.
 
 To run, execute: micropython main.py
 
