@@ -67,7 +67,15 @@ def main(values_module_name='values_dummy'):
         logger.error("unable to load get_values module: {}".format(values_module_name))
         sys.exit(1)
 
-    values = values_module.get();
+    try:
+        values = values_module.get()
+    except:
+        logger.error("Exception on executing get_values for module: {}".format(values_module_name))
+        sys.exit(1)
+    if values is None:
+        logger.error("failure on getting values for module: {}".format(values_module_name))
+        sys.exit(1)
+
     logger.debug("posting: {}, data={}".format(event_name, ujson.dumps(values)))
     gc.collect()
     logger.debug("free mem before post: {}".format(gc.mem_free()))

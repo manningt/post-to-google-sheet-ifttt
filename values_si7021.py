@@ -5,13 +5,14 @@ def get():
     import si7021
     from utime import sleep
 
-    # i2c = machine.I2C(scl=machine.Pin(5), sda=machine.Pin(4))
-    i2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(23))
+    #esp8266: i2c = machine.I2C(scl=machine.Pin(5), sda=machine.Pin(4))
+    i2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21))
+    sample = None
     try:
         sensor = si7021.Si7021(i2c)
+        sample = {};
+        sample["value1"] = round(sensor.relative_humidity, 1)
+        sample["value2"] = round(si7021.convert_celcius_to_fahrenheit(sensor.temperature_quick), 1)
     except:
-        return None
-    sample = {};
-    sample["value1"] = sensor.relative_humidity
-    sample["value2"] = si7021.convert_celcius_to_fahrenheit(sensor.temperature)
+        pass
     return sample
