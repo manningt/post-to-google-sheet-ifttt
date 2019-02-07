@@ -9,6 +9,15 @@ def main(values_module_name='values_dummy'):
 
     if sys.platform.startswith('esp'):
         import machine
+        # configure timer to issue reset, so the device will reboot and retry to connect, etc.
+        TIME_BEFORE_RESET = 120000  # 3 minutes in milliseconds
+        tim = machine.Timer(1)
+        # tim.init throws an OSError 261 after a soft reset; this is a work-around:
+        try:
+            tim.init(period=TIME_BEFORE_RESET, mode=machine.Timer.ONE_SHOT, callback=lambda t: machine.reset())
+        except Exception as e:
+            logger.warning("Exception '%s' on tim.init; No reset after a timer expiry.", e)
+
         import network
         ap_if = network.WLAN(network.AP_IF)
         ap_if.active(False)
@@ -26,16 +35,8 @@ def main(values_module_name='values_dummy'):
                 break
         if not wlan.isconnected():
             logger.error("Could not connect to wifi: {}".format(cfg_info['SSID']))
+            wlan.disconnect()
             sys.exit(1)
-
-        # configure timer to issue reset, so the device will reboot and retry to connect, etc.
-        TIME_BEFORE_RESET = 120000  # 3 minutes in milliseconds
-        tim = machine.Timer(1)
-        # tim.init throws an OSError 261 after a soft reset; this is a work-around:
-        try:
-            tim.init(period=TIME_BEFORE_RESET, mode=machine.Timer.ONE_SHOT, callback=lambda t: machine.reset())
-        except Exception as e:
-            logger.warning("Exception '%s' on tim.init; No reset after a timer expiry.", e)
 
     event_cfg = get_cfg_info('event_cfg.json')
     # event_cfg.json = {"API_key": "xx", "event_name": "yy", "sleep_time: 1234}
