@@ -6,7 +6,7 @@ This [tutorial](https://randomnerdtutorials.com/esp32-esp8266-publish-sensor-rea
 This repository is for posting in a micropython environment, which can be loaded on your hardware by following
 the instructions [here](http://docs.micropython.org/en/latest/). It was tested using unix (macos) micropython.
 
-To run the program, an API key from ifttt.com needs to be obtained and put in a JSON file (stored at the root of the filesystem) as follows:
+To run the program, an API key from ifttt.com needs to be obtained and put in a JSON file (stored in the same directory as main.py) as follows:
 
 `event_cfg.json: {"API_key":"your_key", "event_name":"your_name", "sleep_time":21600}`
 
